@@ -1,1 +1,1 @@
-message depuis clone B
+message résolu : clone A et clone B
