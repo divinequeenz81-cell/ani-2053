@@ -1,0 +1,12 @@
+# Configuration
+
+setting_one = 10
+setting_two = 20
+setting_three = 30
+setting_four = 40
+setting_five = 50
+setting_six = 60
+setting_seven = 70
+setting_eight = 80
+setting_nine = 90
+setting_ten = 100
