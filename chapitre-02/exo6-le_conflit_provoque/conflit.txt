@@ -1,1 +1,1 @@
-message initial
+message depuis clone B
