@@ -1,6 +1,6 @@
 # Configuration
 
-setting_one = 10
+setting_one = 99
 setting_two = 20
 setting_three = 30
 setting_four = 40
