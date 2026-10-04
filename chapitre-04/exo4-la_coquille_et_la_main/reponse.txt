@@ -1,0 +1,5 @@
+Ce que la coquille me donne: La coquille me donne une structure déjà préparée pour créer une fenêtre, gérer le temps, mettre à jour l'application et afficher le rendu. Je peux donc me concentrer surtout sur le comportement de mon application.
+
+Ce qu'elle me prend: Elle me retire une partie du contrôle sur la boucle principale et sur l'ordre précis des opérations. Elle masque aussi certains détails de la création et de la gestion de la fenêtre.
+
+Quand je choisirais la main: Je choisirais la main lorsque j'ai besoin de contrôler directement la fenêtre et la boucle, par exemple pour comprendre précisément les événements, l'ordre du rendu ou adapter le fonctionnement à un besoin particulier.
