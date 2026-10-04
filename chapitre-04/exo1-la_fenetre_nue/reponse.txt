@@ -1,0 +1,8 @@
+Ce que la coquille fait a ma place :
+NkCanvasApp s'occupe de créer la fenêtre, de gérer son cycle de vie et de faire fonctionner la boucle principale de l'application. Je n'ai donc pas besoin de gérer moi-même la création et la fermeture de la fenêtre.
+
+Ce qui se passe si je configure dans OnInit :
+La fenêtre est déjà créée lorsque OnInit est appelé. Les paramètres comme le titre, la taille et la couleur de fond ne sont donc pas appliqués comme prévu et la fenêtre ne prend pas la configuration demandée.
+
+Ce qui se passe sans NKMain.h :
+Le programme ne se construit pas correctement car les éléments nécessaires pour utiliser NkCanvasApp et nkmain ne sont plus disponibles. L'édition de liens échoue notamment sur un symbole que je n'ai pas écrit moi-même.

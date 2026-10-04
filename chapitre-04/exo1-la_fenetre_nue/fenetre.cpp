@@ -5,9 +5,10 @@ class FenetreNue : public NkCanvasApp
 public:
     FenetreNue()
     {
-        SetTitle("Fenetre nue");
-        SetSize({800, 600});
-        SetBackgroundColor({18, 18, 24});
+        Config().title = "Fenetre nue";
+        Config().width = 800;
+        Config().height = 600;
+        Config().clearColor = {18, 18, 24, 255};
     }
 };
 
