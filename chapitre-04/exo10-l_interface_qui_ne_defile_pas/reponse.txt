@@ -1,0 +1,8 @@
+Ce que fait la barre sans ResetView :
+La barre se déplace avec le monde et ne reste plus à sa position fixe.
+
+Pourquoi :
+La vue utilisée pour faire défiler le monde reste active lorsque la barre est dessinée. La barre est donc transformée par cette même vue.
+
+Ou placer l'appel :
+Il faut placer ResetView() après le dessin du monde et avant le dessin de l'interface fixe.
