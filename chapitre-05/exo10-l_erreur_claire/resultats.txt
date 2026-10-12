@@ -1,0 +1,3 @@
+fichier : C:\Users\GAMING\AppData\Local\Temp\exo10_media\video.avi, ouvert : oui, images : 8, sonde : inconnue
+fichier : C:\Users\GAMING\AppData\Local\Temp\exo10_media\video_tronquee.avi, ouvert : oui, images : 3, sonde : inconnue
+fichier : C:\Users\GAMING\AppData\Local\Temp\exo10_media\faux.mp4, ouvert : non, images : 0, sonde : inconnue

@@ -1,0 +1,8 @@
+﻿Ce que le refus m'apprend :
+Le refus indique que le lecteur n'a pas pu ouvrir le fichier. Pour le faux.mp4, le contenu est un fichier texte et non une vraie vidéo. Le refus ne suffit pas, à lui seul, à identifier précisément la cause.
+
+Ce qu'il ne m'apprend pas :
+Un refus ne prouve pas que tous les lecteurs vidéo refuseront le fichier. Il ne permet pas non plus de conclure que le fichier est corrompu sans examiner son contenu.
+
+Comment j'ai trouve la cause :
+J'ai comparé trois fichiers. La vidéo normale a été ouverte et 8 images ont été lues. La vidéo tronquée a été ouverte, mais seulement 3 images ont été lues. Le faux.mp4 a été refusé. La sonde n'a reconnu aucun des trois fichiers, car elle ne reconnaît pas leur format dans ces tests. Les résultats montrent donc que la troncature peut empêcher la lecture de toutes les images, et qu'un fichier texte renommé en MP4 n'est pas une vraie vidéo.
