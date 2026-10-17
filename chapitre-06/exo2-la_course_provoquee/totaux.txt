@@ -1,0 +1,27 @@
+﻿Dix totaux :
+1340448
+1394499
+2058688
+1567837
+1204492
+1164889
+1209889
+1315965
+1299430
+1262338
+
+Un seul fil :
+Total obtenu : 1000000
+Total attendu : 1000000
+
+Release :
+Essai 1 : Total obtenu = 8000000 ; Total attendu = 8000000
+Essai 2 : Total obtenu = 8000000 ; Total attendu = 8000000
+Essai 3 : Total obtenu = 8000000 ; Total attendu = 8000000
+
+Pourquoi :
+L'instruction compteur += 1 comprend une lecture du compteur, une addition de 1 et une écriture du résultat. Ces opérations ne sont pas atomiques. Lorsque plusieurs fils les exécutent simultanément, ils peuvent lire la même ancienne valeur et écrire ensuite le même résultat. Des incrémentations sont alors perdues. Cela explique pourquoi les totaux obtenus en Debug avec huit fils sont inférieurs aux 8 000 000 attendus.
+
+Avec un seul fil, aucune autre exécution ne modifie le compteur simultanément : les 1 000 000 incrémentations sont comptabilisées.
+
+En Release, les optimisations du compilateur peuvent modifier le comportement observé. Les trois essais ont donné 8 000 000, mais cela ne garantit pas que le programme soit correct. En C++, une course de données entraîne un comportement indéfini ; les résultats ne sont donc pas garantis.
