@@ -1,0 +1,130 @@
+﻿EXERCICE 1 - LE MOTIF ET SON FICHIER
+Chapitre 8 - Motifs de conception
+
+NOTE PREALABLE
+Les références ci-dessous ont été relevées dans le dossier source Nkentseu présent sur la machine. Le kit Canvas du 22 octobre 2026 n'ayant pas pu être vérifié, les chemins et lignes devront être comparés avec ce kit si celui-ci est exigé pour la validation.
+
+1. STRATEGIE
+
+Fichier : Kernel/Runtime/NKCanvas/src/NKCanvas/Renderer/Resources/NkShaderBackend.h
+Ligne 51 :
+uint32 (*Create)(const NkShaderSources &sources) = nullptr;
+
+Le backend fournit différentes fonctions de création selon l'implementation graphique utilisée. Les pointeurs de fonction permettent de choisir l'implementation à utiliser.
+
+2. FABRIQUE
+
+Fichier : Kernel/Runtime/NKCanvas/src/NKCanvas/Factory/NkContextFactory.h
+Ligne 30 :
+class NkContextFactory {
+
+Ligne 35 :
+static NkIGraphicsContext *Create(const NkWindow &window, const NkContextDesc &desc);
+
+La fabrique centralise la création des contextes graphiques. Le code appelant demande un contexte sans devoir connaître directement la classe concrète à instancier.
+
+3. FACADE
+
+Fichier : Kernel/Runtime/NKCanvas/src/NKCanvas/Renderer/Core/NkIRenderer2D.h
+Ligne 46 :
+class NkIRenderer2D {
+
+Ligne 59 :
+virtual bool Begin() = 0;
+
+Cette interface propose des opérations simples pour utiliser le moteur de rendu 2D, comme Begin(), Draw() et End(). Elle masque une partie des différences entre les différents backends graphiques. Il s'agit d'un exemple d'abstraction simplificatrice proche du motif Façade.
+
+4. PATRON DE METHODE (TEMPLATE METHOD)
+
+Fichier : Kernel/Runtime/NKCanvas/src/NKCanvas/Renderer/Batch/NkBatchRenderer2D.h
+Ligne 31 :
+class NkBatchRenderer2D : public NkIRenderer2D {
+
+Lignes 158 et 162 :
+virtual void BeginBackend() { }
+virtual void EndBackend() { }
+
+Lignes 167 et 170 :
+virtual void SubmitBatches(...) = 0;
+virtual void UploadProjection(const float32 proj[16]) = 0;
+
+La classe de base définit une structure commune pour le rendu par lots et laisse certaines opérations spécifiques aux classes dérivées. Ces dernières fournissent les étapes propres à leur backend graphique.
+
+5. OBSERVATEUR
+
+Fichier : Kernel/Runtime/NKEvent/src/NKEvent/NkEventSystem.h
+Ligne 313 :
+void AddEventCallback(Callback &&callback, NkWindowId windowId = NK_INVALID_WINDOW_ID) {
+
+Ligne 536 :
+void DispatchToCallbacks(NkEvent *ev, NkWindowId winId);
+
+Ligne 545 :
+void AddEventCallbackRaw(NkEventType::Value type, NkEventCallback callback);
+
+Les fonctions de rappel permettent à plusieurs abonnés de recevoir une notification lorsqu'un événement est distribué. C'est le principe du motif Observateur.
+
+6. SINGLETON
+
+Fichier : Kernel/System/NKLogger/src/NKLogger/NkLog.h
+Ligne 143 :
+static NkLog& Instance();
+
+Fichier : Kernel/System/NKLogger/src/NKLogger/NkLog.cpp
+Lignes 412 à 416 :
+NkLog &NkLog::Instance() {
+    // Meyer's singleton : static local, thread-safe en C++11+
+    // L'instance est créée au premier appel, détruite à la fin du programme
+    static NkLog instance;
+    return instance;
+}
+
+La méthode Instance() donne un accès global à une instance unique de NkLog. La variable statique locale garantit qu'une seule instance est créée.
+
+7. ADAPTATEUR
+
+Fichier : Kernel/Runtime/NKCanvas/src/NKCanvas/UI/NkGuiCanvasBackend.h
+Lignes 3 à 5 : commentaire expliquant le rôle de pont entre NKGui et NKCanvas.
+Ligne 21 : déclaration de NkGuiCanvasBackend.
+Ligne 112 : méthode Submit() recevant une liste de dessin NKGui.
+Lignes 132 à 140 : conversion des sommets NKGui en sommets NKCanvas.
+Ligne 188 : appel à mRenderer->DrawVertices(...).
+
+NkGuiCanvasBackend traduit les listes de dessin produites par NKGui en appels compréhensibles par NKCanvas. Il adapte donc deux interfaces différentes pour les faire fonctionner ensemble.
+
+8. COMPOSITE
+
+Fichier : Kernel/Runtime/NKCanvas/src/NKCanvas/Renderer/Core/NkRenderStates.h
+Ligne 8 : commentaire expliquant la composition parent-enfant.
+Ligne 16 :
+states.transform = parentTransform;
+
+Fichier : Kernel/Runtime/NKCanvas/src/NKCanvas/Renderer/Resources/NkSprite.cpp
+Lignes 67 à 70 : commentaire décrivant l'ancien problème.
+Ligne 73 : nouvelle méthode Draw() recevant les états.
+Lignes 78 à 80 :
+NkRenderStates s = states;
+s.transform *= GetTransform();
+s.texture = mTexture;
+
+La transformation du parent est transmise à l'enfant et composée avec sa transformation locale. L'ancien code du sprite ignorait l'état reçu, ce qui empêchait son utilisation correcte comme enfant d'un objet transformé. Ce problème a été corrigé.
+
+9. COMMANDE
+
+Statut : motif non identifié dans les fichiers NKCanvas examinés.
+
+La recherche des éléments suivants n'a donné aucun résultat :
+- class NkCommand
+- struct NkCommand
+- Command::
+- Undo()
+- Redo()
+- Replay()
+
+Mécanisme le plus proche : le système d'événements NkEventSystem.
+
+Différence : un événement sert à notifier les abonnés qu'une action ou un événement s'est produit. Il ne représente pas nécessairement une commande encapsulée dans un objet que l'on peut stocker, rejouer ou annuler.
+
+CONCLUSION
+
+Huit motifs ont été identifiés ou rapprochés de leur définition dans le code examiné. Le motif Commande n'a pas été retrouvé dans les fichiers NKCanvas recherchés. Le cas de la Façade est à considérer avec nuance, car NkIRenderer2D est avant tout une interface abstraite commune aux différents backends.
