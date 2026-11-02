@@ -1,0 +1,24 @@
+﻿Recherche :
+Commande exécutée :
+Get-ChildItem "C:\Users\GAMING\Desktop\Nkentseu\Kernel\Runtime\NKCanvas" -Recurse -File -Include "*.h","*.cpp","*.hpp" | Select-String -SimpleMatch "NkOpenGLRenderer2D"
+Résultat : 9 fichiers distincts trouvés dans les sources NKCanvas, dont 6 hors du dossier Backend\OpenGL.
+Remarque : le dossier include/ du kit Canvas du 22 octobre n'étant pas disponible, la recherche a été effectuée dans les sources NKCanvas locales.
+
+Hors de son dossier :
+- Renderer/Core/NkIRenderer2D.h, ligne 15 : commentaire.
+- Renderer/Core/NkRenderer2D.h, ligne 19 : commentaire.
+- Renderer/Core/NkRenderer2DFactory.cpp, ligne 9 : code (inclusion du fichier NkOpenGLRenderer2D.h).
+- Renderer/Core/NkRenderer2DFactory.cpp, ligne 62 : code (création d'une instance de NkOpenGLRenderer2D).
+- Renderer/Resources/NkTexture.cpp, ligne 241 : commentaire.
+- Renderer/Resources/NkTexture.cpp, ligne 249 : commentaire.
+- Renderer/Resources/NkTexture.cpp, ligne 250 : occurrence dans le commentaire situé à la fin de la ligne.
+- Renderer/Resources/NkTextureBackend.h, ligne 22 : commentaire.
+- Renderer/Resources/NkTextureBackend.h, ligne 24 : commentaire.
+- Renderer/Resources/NkTextureBackend.h, ligne 25 : commentaire.
+- Renderer/Resources/NkTextureBackend.h, ligne 26 : commentaire.
+- Renderer/Resources/NkTextureBackend.h, ligne 27 : commentaire.
+- Renderer/Resources/NkTextureBackend.h, ligne 28 : commentaire.
+- Renderer/Targets/NkRenderWindow.cpp, ligne 97 : commentaire.
+
+Conclusion :
+Le fichier NkRenderer2DFactory.h ne cite aucun moteur graphique concret. Il expose uniquement des méthodes de création qui utilisent l'interface NkIRenderer2D. Ainsi, l'appelant n'a pas besoin de connaître la classe concrète utilisée. En revanche, NkRenderer2DFactory.cpp connaît les différents moteurs graphiques et choisit celui qui correspond à l'API demandée. Il inclut NkOpenGLRenderer2D.h à la ligne 9 et crée une instance de NkOpenGLRenderer2D à la ligne 62. La fabrique centralise donc la création des différents moteurs graphiques et cache leur choix à l'appelant.
