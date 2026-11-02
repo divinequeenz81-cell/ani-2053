@@ -1,0 +1,17 @@
+﻿Virtuelles pures :
+La classe NkIRenderer2D contient 30 méthodes virtuelles pures et 16 méthodes virtuelles avec corps ou destructeur par défaut, soit 46 déclarations virtuelles au total. Pour les compter, j'ai examiné les déclarations dans la classe et repéré celles qui se terminent par = 0. J'ai vérifié le résultat en recherchant les déclarations virtuelles dans le fichier et en les comptant manuellement. La méthode Draw de NkIDrawable2D, située dans une autre classe, n'est pas comptée.
+
+Dorsaux :
+La classe NkBatchRenderer2D hérite de NkIRenderer2D. Les renderers des dossiers DirectX, OpenGL, Software et Vulkan héritent de NkBatchRenderer2D. Les implémentations trouvées sont :
+- DirectX 11 : NkDX11Renderer2D, 9 redéfinitions, destructeur compris.
+- DirectX 12 : NkDX12Renderer2D, 9 redéfinitions, destructeur compris.
+- OpenGL : NkOpenGLRenderer2D, 10 redéfinitions, destructeur compris.
+- Software : NkSoftwareRenderer2D, 10 redéfinitions, destructeur compris.
+- Vulkan : NkVulkanRenderer2D, 9 redéfinitions, destructeur compris.
+Le dossier Metal ne contient pas de fichier Renderer2D.h dans l'arborescence examinée.
+
+Ce que chacun écrit :
+Chaque backend redéfinit les méthodes nécessaires à son fonctionnement graphique. Les méthodes communes observées sont Initialize, Shutdown, IsValid, Clear, BeginBackend, EndBackend, SubmitBatches et UploadProjection. OpenGL redéfinit également ApplyScissor, tandis que Software redéfinit Draw(const NkSprite&). Les destructeurs redéfinissent également le destructeur virtuel de la classe parente.
+
+Le coût :
+L'ajout d'un nouveau backend demande de créer une classe dérivée de NkBatchRenderer2D et d'implémenter les méthodes nécessaires, notamment SubmitBatches et UploadProjection. Il faut aussi gérer l'initialisation, l'arrêt, le nettoyage et les opérations graphiques propres à la technologie choisie. L'interface commune évite de réécrire les 30 méthodes de NkIRenderer2D dans chaque backend : une grande partie est déjà prise en charge par NkBatchRenderer2D. Le coût dépend donc surtout du travail spécifique au nouveau système graphique.
